@@ -1,0 +1,154 @@
+/* Navigation */
+.nav-switch-view .ui-btn .ui-btn-inner { padding-top: 35px !important; padding-bottom: 0.4em !important; }
+.nav-switch-view .ui-btn .ui-icon { width: 30px!important; height: 30px!important; margin-left: -15px !important; box-shadow: none!important; -moz-box-shadow: none!important; -webkit-box-shadow: none!important; -webkit-border-radius: none !important; border-radius: none !important; }
+
+footer
+{
+	/*display: none;*/
+}
+
+/*#translate-it-app header h1
+{
+	font-family: 'Oleo Script Swash Caps', cursive;
+	font-weight: normal;
+}*/
+
+#app-window-main
+{
+	padding: 2px 6px 15px 6px;
+}
+
+#view-translations-all .ui-icon
+{
+	background: url("../images/53-house.png") 50% 50% no-repeat;
+	background-size: 22px 22px;	
+}
+
+#view-translations-all.ui-btn.ui-btn-active .ui-icon
+{
+	background: url("../images/53-house-light.png") 50% 50% no-repeat;
+}
+
+#view-translations-words .ui-icon
+{
+	background: url("../images/96-book.png") 50% 50% no-repeat;
+	background-size: 18px 26px;
+}
+
+#view-translations-words.ui-btn.ui-btn-active .ui-icon
+{
+	background: url("../images/96-book-light.png") 50% 50% no-repeat;
+}
+
+#view-translations-terms .ui-icon
+{
+	background: url("../images/140-gradhat.png") 50% 50% no-repeat;
+	background-size: 30px 23px;
+}
+
+#view-translations-terms.ui-btn.ui-btn-active .ui-icon
+{
+	background: url("../images/140-gradhat-light.png") 50% 50% no-repeat;
+}
+
+#language-bar
+{
+	overflow: hidden;
+}
+
+#language-bar #language-from, #language-bar #language-switch, #language-bar #language-to
+{
+	float: left;
+}
+
+#language-bar .language-select-cont
+{
+	width: 42%;
+}
+
+#language-bar #language-switch
+{
+	width: 16%;
+}
+
+#language-bar #language-switch img
+{
+	margin: 0 auto;
+	display: block;
+	padding-top: 10px;
+}
+
+#language-bar #language-switch .language-switch-button
+{
+	background: url("../images/switch-languages.png") 50% 50% no-repeat;
+	background-size: 30px 30px;
+	height: 38px;
+	width: 38px;
+	margin-left: auto;
+	margin-right: auto;
+	/*margin-top: 5px;*/
+}
+
+#language-bar .ui-select div.ui-btn
+{
+	margin-left: 0;
+	margin-right: 0;
+}
+
+#search-block label[for="search-query"]
+{
+	display: none;
+}
+
+#search-translations
+{
+
+}
+
+#search-translations .ui-input-search
+{
+    margin: 2px 0;
+    padding-right: 2px;
+}
+
+#search-translations .ui-submit
+{
+    margin: 4px 0 0 0;
+
+}
+
+ul#results
+{
+	margin-top: 10px;
+}
+
+#search-query-block, #search-submit-block
+{
+
+}
+
+#search-query-block
+{
+
+}
+
+#search-submit-block
+{
+    overflow: hidden;
+
+}
+
+p.message-cont
+{
+	margin: 12px;
+}
+
+#search-query-block div.ui-input-text
+{
+	margin: 2px 0 0 0;
+}
+
+#language-bar span.ui-btn-text span
+{
+	float: left;
+}
