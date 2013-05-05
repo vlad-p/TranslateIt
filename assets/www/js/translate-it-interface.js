@@ -1,48 +1,23 @@
 $(document).on('pageinit', '#translate-it-app', function() {
+	/*$.ajax({
+		type: 'GET',
+		url: 'http://translate.google.com/translate_a/t?client=t&sl=en&tl=ru&q=table',
+		dataType: 'jsonp',
+		success: function(result, textStatus, jqXHR) {
+			console.log(arguments);
+		},
+		complete: function(jqXHR, textStatus) {
+			console.log(textStatus);
+		}
+	});*/
+
 	// application control options
 	var options = {
-		activeTranslationType: 'all'
+		activeTranslationType: 'words'
 	};
 
 	// remove clear button from search input
 	$('#search-query-block .ui-input-clear').remove();
-
-	// test dictionary
-	var translationsEN_RU = {
-		'table': [
-			{ type: 'word', translation: 'таблица' },
-			{ type: 'word', translation: 'стол' },
-			{ type: 'word', translation: 'расписание' },
-			{ type: 'term', translation: 'табель' },
-			{ type: 'term', translation: 'рольганг' }
-		],
-		'browser': [
-			{ type: 'term', translation: 'браузер' },
-			{ type: 'term', translation: 'программа просмотра' },
-			{ type: 'word', translation: 'посетитель, рассматривающий товары' }
-		],
-		'checkbox': [
-			{ type: 'word', translation: 'флажок' },
-			{ type: 'term', translation: 'чек-бокс' }
-		]
-	};
-
-	var translationsRU_EN = {
-		'таблица': [
-			{ type: 'word', translation: 'table' },
-			{ type: 'word', translation: 'chart' },
-			{ type: 'word', translation: 'schedule' },
-			{ type: 'term', translation: 'spreadsheet' },
-			{ type: 'term', translation: 'array' }
-		],
-		'браузер': [
-			{ type: 'term', translation: 'browser' }
-		],
-		'флажок': [
-			{ type: 'word', translation: 'flag' },
-			{ type: 'term', translation: 'checkbox' }
-		]
-	};
 
 	// handle translation activities
 	$('#search-translations').submit(function(e){	
@@ -56,35 +31,97 @@ $(document).on('pageinit', '#translate-it-app', function() {
 		var languageFrom = $('#language-from select').val(),
 			languageTo   = $('#language-to select').val();
 
-		var dictionary = languageFrom === 'en' ? translationsEN_RU : translationsRU_EN;
-		var query = $('#search-query').val();
+		var textToTranslate = $('#search-query').val();
 
-		var result = [];
-
-		if (typeof dictionary[query] !== 'undefined') {
-			result = dictionary[query];
-		}
-
-		var $translationsList = $('ul#results').empty();
-		var $translationsListReplacement = $('<ul id="results"></ul>');
-
-		if (result.length > 0) {
-			$.each(result, function(i, val) {
-				var $listItem = $('<li></li>')
-					.html(val.translation)
-					.attr('data-translation-type', val.type)
-					.data('translation-type', val.type)
-					.appendTo($translationsListReplacement);
-			});
-
+		if (languageFrom === languageTo) {
+			var $translationsList = $('ul#results').empty();
+			var $translationsListReplacement = $('<ul id="results"></ul>');
+			var $listItem = $('<li></li>')
+								.html(textToTranslate)
+								.appendTo($translationsListReplacement);
 			$translationsList.replaceWith($translationsListReplacement);
 			$('ul#results').listview();
-
-			switchTranslationType(options.activeTranslationType);
 		} else {
-			$messageContainer
-				.html('No translations found.')
-				.show();
+			var pageBackground = $('#translate-it-app').css('background');
+
+			if (options.activeTranslationType === 'words') {
+				$.ajax({
+					type: 'GET',
+					url: 'http://translateit.hostei.com/ajax/test_translation_service.php',
+					data: {
+						languageFrom: languageFrom,
+						languageTo: languageTo,
+						textToTranslate: textToTranslate,
+						maxTranslations: 10
+					},
+					dataType:'jsonp',
+					beforeSend: function() {
+						$('ul#results').empty();
+						$('#translate-it-app')
+							.css('background','url("images/ajax-loader.gif") no-repeat center');
+					},
+					success: function(result) {
+						// console.log(result);
+
+						$('#translate-it-app')
+							.css('background', pageBackground);
+
+						var $translationsList = $('ul#results').empty();
+						var $translationsListReplacement = $('<ul id="results"></ul>');
+						
+						if (result.Translations.length > 0) {
+							$.each(result.Translations, function() {
+								var translation = this.TranslatedText.toLowerCase();
+								translation = translation.replace(/[;\\\/:*?\"<>|&\'\.]/g, '')
+								var $listItem = $('<li></li>')
+													.html(translation)
+													.appendTo($translationsListReplacement);
+							});
+
+							$translationsList.replaceWith($translationsListReplacement);
+							$('ul#results').listview();
+						} else {
+							$messageContainer
+								.html('No translations found.')
+								.show();
+						}
+					}
+				});
+			} else if (options.activeTranslationType === 'phrases') {
+				$.ajax({
+					type: 'GET',
+					url: 'https://translate.yandex.net/api/v1.5/tr.json/translate',
+					data: {
+						key: 'trnsl.1.1.20130502T083517Z.364dbfbe6df7c456.b87249b5fc8661ebddbcb8a09eea56c995f868a8',
+						lang: languageFrom + '-' + languageTo,
+						text: textToTranslate
+					},
+					dataType: 'json',
+					beforeSend: function() {
+						$('ul#results').empty();
+						$('#translate-it-app')
+							.css('background','url("images/ajax-loader.gif") no-repeat center');
+					},
+					success: function(result) {
+						$('#translate-it-app')
+							.css('background', pageBackground);
+						
+						if (result.text.length > 0) {
+							var $translationsList = $('ul#results').empty();
+							var $translationsListReplacement = $('<ul id="results"></ul>');
+							var $listItem = $('<li></li>')
+												.html(result.text[0])
+												.appendTo($translationsListReplacement);
+							$translationsList.replaceWith($translationsListReplacement);
+							$('ul#results').listview();
+						} else {
+							$messageContainer
+								.html('No translations found.')
+								.show();
+						}
+					}
+				});
+			}
 		}
 	});
 	
@@ -97,34 +134,10 @@ $(document).on('pageinit', '#translate-it-app', function() {
 	});
 
 	function switchTranslationType(switchToType) {
-		options.activeTranslationType = switchToType;
-		
-		var $translationsList = $('ul#results');
-		var $messageContainer = $('p.message-cont');
-
-		if ($translationsList.children().length > 0) {
-			if (switchToType !== 'all') {
-				var message;
-				if (switchToType === 'word') {
-					message = 'No translations of type "Word" found.';
-				} else {
-					message = 'No translations of type "Term" found.';
-				}
-				$translationsList.find('li').hide();
-				var $filteredItems = $translationsList.find('li[data-translation-type="' + switchToType + '"]');
-
-				if ($filteredItems.length > 0) {
-					$messageContainer.hide();
-					$filteredItems.show();
-				} else {
-					$messageContainer
-						.html(message)
-						.show();
-				}
-			} else {
-				$messageContainer.hide();
-				$translationsList.find('li').show();
-			}
+		if (switchToType !== options.activeTranslationType) {
+			options.activeTranslationType = switchToType;
+			$('#search-query').val('');
+			$('ul#results').empty();
 		}
 	}
 

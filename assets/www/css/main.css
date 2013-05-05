@@ -40,13 +40,13 @@ footer
 	background: url("../images/96-book-light.png") 50% 50% no-repeat;
 }
 
-#view-translations-terms .ui-icon
+#view-translations-phrases .ui-icon
 {
 	background: url("../images/140-gradhat.png") 50% 50% no-repeat;
 	background-size: 30px 23px;
 }
 
-#view-translations-terms.ui-btn.ui-btn-active .ui-icon
+#view-translations-phrases.ui-btn.ui-btn-active .ui-icon
 {
 	background: url("../images/140-gradhat-light.png") 50% 50% no-repeat;
 }
