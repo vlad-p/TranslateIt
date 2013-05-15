@@ -54,7 +54,7 @@ $(document).on('pageinit', '#translate-it-app', function() {
 						textToTranslate: textToTranslate,
 						maxTranslations: 10
 					},
-					dataType:'jsonp',
+					dataType:'json',
 					beforeSend: function() {
 						$('ul#results').empty();
 						$('#translate-it-app')
